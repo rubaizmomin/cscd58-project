@@ -1,20 +1,23 @@
+from mininet.net import Mininet
 from mininet.cli import CLI
-from src.topologies import buildTreeGraph   
-from src.extractions import convert_nx_to_mininet, convert_mininet_to_py
+from mininet.node import OVSSwitch, Host, OVSController
+from mininet.link import TCLink  
+from src.extractions import convert_mininet_to_py, convert_nx_to_mininet
+from src.topologies import buildLineGraph   
+
 
 def main():
-    print("Building NetworkX graph...")
-    graph = buildTreeGraph(8)      
-    # The other graphs can be tested the same way
-    # Make a graph using the specified function and run it here
-    print("Converting to Mininet...")
-    net = convert_nx_to_mininet(graph, bandwidth=5, delay='10ms', packetLoss=1)
+    
+    graph = buildLineGraph(2)
+
+    net = convert_nx_to_mininet(graph)
+
 
     print("Starting Mininet...")
     net.start()
 
-    print("Network loaded! Retrieving graph")
-    weights = convert_mininet_to_py(net)
+    print("Extracting link weights")
+    weights = convert_mininet_to_py.extract_mininet(net)
     print(weights)
 
 

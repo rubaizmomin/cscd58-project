@@ -2,25 +2,35 @@ from mininet.net import Mininet
 from mininet.node import OVSSwitch, Host, OVSController, Node
 from mininet.link import TCLink, Intf # this library makes it more realistic with metrics like bamdwidth, delay, packet loss
 
-# TODO: finish this
-def parsePing(s: str) -> float:
-    print(s)
-    return 0
+# failed links will return infinity
+def parse_ping(s: str) -> float:
 
-# 
-def extractLinkWeight(h1: Host, h2: Host):
+    stats = s.split('\n')[-2].split('/')
+    if len(stats) > 5:
+        return float(stats[-2])
+    
+    return float('inf')
+
+def extract_link(h1: Node, h2:  Node) -> float:
     assert h1 is not h2
     assert len(h1.connectionsTo(h2)) > 0
-    pingStr = h1.cmd("ping -c 1 " + h2.name)
-    return parsePing(pingStr)
+    cmdStr = "ping -c 1 " + h2.IP()
+    pingStr = h1.cmd(cmdStr)
+    return  parse_ping(pingStr)# parse_ping(pingStr)
 
 
 # gets takes all the links in net and passes a ping through 
-def convert_mininet_to_py(net: Mininet):
+def extract_mininet(net: Mininet) -> dict:
     weights = {}
-    for h1 in net.hosts:
+    for s1 in net.switches:
         for h2 in net.hosts:
-            if h1 is not h2 and len(h1.connectionsTo(h2)) > 0:
-                extractLinkWeight(h1, h2)
+            if len(s1.connectionsTo(h2)) > 0:
+                weights[s1, h2] = extract_link(s1, h2)
+            
+        
+        for s2 in net.switches:
+            if s1 is not s2 and len(s1.connectionsTo(s2)) > 0:
+                weights[s1, s2] = extract_link(s1, s2)
+
 
     return weights
