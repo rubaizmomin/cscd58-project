@@ -1,1 +1,2 @@
 from .convert_nx_to_mininet import convert_nx_to_mininet
+from .convert_mininet_to_nx import convert_mininet_to_nx
