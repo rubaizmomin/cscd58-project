@@ -25,17 +25,21 @@ def run_simulation(nx_graph, max_reps):
             daemon=True
         )
         curr_reps = 0
+        extract_times = []
+        djik_times = []
+        bell_times = []
         link_failure_thread.start()
 
         while curr_reps < max_reps:
             time.sleep(5)
 
             #start timer here
-            
+            start_time = time.perf_counter_ns()
 
             # after running the mininet, get the current state of the graph in networkx
             adj = extract_mininet(net)
             # end exctraction timer
+            extract_time = time.perf_counter_ns()
             print(adj)
 
             
@@ -44,6 +48,7 @@ def run_simulation(nx_graph, max_reps):
             dijkstra_dist, dijkstra_prev = dijkstras(adj, source)
             dijkstra_path = reconstructPath(dijkstra_prev, source, target)
             # end djikstra timer
+            djik_time = time.perf_counter_ns()
 
             # run bellman ford
             bf_dist, bf_prev, bf_negativeCycle = bellmanFord(adj, source)
@@ -55,12 +60,19 @@ def run_simulation(nx_graph, max_reps):
                 bf_path = reconstructPath(bf_prev, source, target)
                 bf_cost = bf_dist.get(target, float('inf'))
             #end bellman ford timer    
+            bell_time= time.perf_counter_ns()
 
+            extract_times.append(extract_time - start_time)
+            djik_times.append(djik_time - extract_time)
+            bell_times.append(bell_time - djik_time)
             print("\n==== CURRENT TOPOLOGY =====")
-            print("Dijkstra path:", dijkstra_path, "cost=", dijkstra_dist[target])
-            print("Bellman-Ford path:", bf_path, "cost=", bf_cost)
+            print("Dijkstra path:", dijkstra_path, "cost=", dijkstra_dist[target], "time=", djik_times[-1])
+            print("Bellman-Ford path:", bf_path, "cost=", bf_cost, "time=", bell_times[-1])
             curr_reps += 1
     except KeyboardInterrupt:
         print("\nStopping the simulation and cleaning mininet")
     finally:
         net.stop()
+        print("djikstra min/max/mean:", min(djik_times), max(djik_times), sum(djik_times)/len(djik_times))
+        print("bellman-ford min/max/mean:", min(bell_times), max(bell_times), sum(bell_times)/len(bell_times))
+
