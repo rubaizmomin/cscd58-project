@@ -9,12 +9,19 @@ import networkx as nx
 
 def run_simulation(nx_graph, max_reps):
 
-#TODO: should source and target always be hardcoded?
-    source = "h1"
-    target = "h3"
     try:
         # get the mininet graph and start the mininet graph
         net = convert_nx_to_mininet(nx_graph)
+
+        hosts = [x.name for x in net.hosts]
+        print("hostnames:", hosts)
+        source = ""
+        target = ""
+        while source not in hosts:
+            source = input("Pick a starting node:")
+
+        while target not in hosts:
+            target = input("Pick a destination node:")
         net.start()
 
         # start random link failures using a thread
