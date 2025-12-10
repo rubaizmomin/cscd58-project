@@ -60,12 +60,12 @@ def run_simulation(nx_graph, max_reps):
 
             # run bellman ford
             bf_dist, bf_prev, bf_negativeCycle = bellmanFord(adj, source)
-
+            bell_time = time.perf_counter_ns()
             if bf_negativeCycle:
                 bf_path = []
                 bf_cost = float('inf')
                 print("Negative weight cycle detected")
-                bell_time = time.perf_counter_ns()
+                # bell_time = time.perf_counter_ns()
             else:
                 # Do not take resconstruction time into account for bellman ford time
                 bell_time = time.perf_counter_ns()
