@@ -53,21 +53,25 @@ def run_simulation(nx_graph, max_reps):
 
             # run dijkstra
             dijkstra_dist, dijkstra_prev = dijkstras(adj, source)
-            dijkstra_path = reconstructPath(dijkstra_prev, source, target)
             # end djikstra timer
             djik_time = time.perf_counter_ns()
+            # We dont need to include reconstruction time in dijkstra time
+            dijkstra_path = reconstructPath(dijkstra_prev, source, target)
 
             # run bellman ford
             bf_dist, bf_prev, bf_negativeCycle = bellmanFord(adj, source)
+            bell_time = time.perf_counter_ns()
             if bf_negativeCycle:
                 bf_path = []
                 bf_cost = float('inf')
                 print("Negative weight cycle detected")
+                # bell_time = time.perf_counter_ns()
             else:
+                # Do not take resconstruction time into account for bellman ford time
+                bell_time = time.perf_counter_ns()
                 bf_path = reconstructPath(bf_prev, source, target)
                 bf_cost = bf_dist.get(target, float('inf'))
             #end bellman ford timer    
-            bell_time= time.perf_counter_ns()
 
             extract_times.append(extract_time - start_time)
             djik_times.append(djik_time - extract_time)
