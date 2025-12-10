@@ -37,11 +37,9 @@ def run_simulation(nx_graph, max_reps):
         bell_times = []
         link_failure_thread.start()
 
-        prev_dijkstra_path = None
-        prev_bellman_path = None
-        dijkstra_unstable_start = None
+        dijkstra_unstable_start = None     
         bellman_unstable_start = None
-        dijkstra_stable_time = None
+        dijkstra_stable_time = None        
         bellman_stable_time = None
 
         while curr_reps < max_reps:
@@ -66,15 +64,20 @@ def run_simulation(nx_graph, max_reps):
             dijkstra_path = reconstructPath(dijkstra_prev, source, target)
 
             now = time.perf_counter_ns()
-            if dijkstra_path != prev_dijkstra_path:
-                dijkstra_unstable_start = now
-                dijkstra_stable_time = None
+            dijkstra_has_path = True
+            if dijkstra_path == []:
+                dijkstra_has_path = False
+
+            if dijkstra_dist[target] == float('inf'):
+                dijkstra_has_path = False
+            
+            if dijkstra_has_path == False:
+                if dijkstra_unstable_start is None:
+                    dijkstra_unstable_start = now
             else:
                 if dijkstra_unstable_start is not None and dijkstra_stable_time is None:
                     dijkstra_stable_time = now - dijkstra_unstable_start
-
-            prev_dijkstra_path = dijkstra_path
-
+                    
             # run bellman ford
             bf_dist, bf_prev, bf_negativeCycle = bellmanFord(adj, source)
             bell_time = time.perf_counter_ns()
@@ -91,16 +94,20 @@ def run_simulation(nx_graph, max_reps):
             #end bellman ford timer    
 
             now = time.perf_counter_ns()
-            if bf_path != prev_bellman_path:
-                bellman_unstable_start = now
-                bellman_stable_time = None
+            bellman_has_path = True
+            
+            if bf_path == []:
+                bellman_has_path = False
+            if bf_cost == float('inf'):
+                bellman_has_path = False
+
+            if bellman_has_path == False:
+                if bellman_unstable_start is None:
+                    bellman_unstable_start = now
             else:
                 if bellman_unstable_start is not None and bellman_stable_time is None:
-                    bellman_stable_time = now - bellman_unstable_start
-
-            prev_bellman_path = bf_path
-
-
+                    bellman_stable_time = now - bellman_unstable_start  
+            
             extract_times.append(extract_time - start_time)
             djik_times.append(djik_time - extract_time)
             bell_times.append(bell_time - djik_time)
@@ -129,6 +136,8 @@ def run_simulation(nx_graph, max_reps):
         print("\nStopping the simulation and cleaning mininet")
     finally:
         net.stop()
-        print("djikstra min/max/mean:", min(djik_times), max(djik_times), sum(djik_times)/len(djik_times))
-        print("bellman-ford min/max/mean:", min(bell_times), max(bell_times), sum(bell_times)/len(bell_times))
+        if djik_times:
+            print("djikstra min/max/mean:", min(djik_times), max(djik_times), sum(djik_times)/len(djik_times))
+        if bell_times:
+            print("bellman-ford min/max/mean:", min(bell_times), max(bell_times), sum(bell_times)/len(bell_times))
 
