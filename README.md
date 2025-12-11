@@ -40,7 +40,7 @@ We will be running both on the network simulation tool mininet to determine thei
   1. Topology: Use the keywords from the following: \[dense, line, ring, sparse, star, tree\]
   2. Size of the graph: numbers representing the hosts
   3. Repetition: How many times the simulation should run
-  4. So to run a ring graph with 10 hosts and repeat the simulation 3 times, we do: **sudo python3 main.py ring 10 3**
+4. So to run a ring graph with 10 hosts and repeat the simulation 3 times, we do: **sudo python3 main.py ring 10 3**
 
 # Implementation details
 
