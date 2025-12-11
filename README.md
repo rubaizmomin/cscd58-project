@@ -1,10 +1,9 @@
-## Introduction
+# Introduction
+For our project we will be making and testing our own implementations of a couple of common pathfinding algorithms. In real networks they’re used to construct routing tables that determine where a received packet should be sent. We aren’t doing all that. We are just going to get information about the algorithms that would be used by the routers. 
 
-	For our project we will be making and testing our own implementations of a couple of common pathfinding algorithms. In real networks they’re used to construct routing tables that determine where a received packet should be sent. We aren’t doing all that. We are just going to get information about the algorithms that would be used by the routers. 
+The 2 pathfinding algorithms we will be comparing are djikstra’s algorithm and bellman-ford’s. Djikstra’s algorithm is a greedy algorithm that keeps a priority queue of untraversed edges. Upon visiting a node its edges are added to the queue. The algorithm will then check the lowest weight edge in the queue until it reaches the destination. If all of the edges are positive then it will always find the shortest path. Bellman-Ford is similar but it uses a normal queue instead of a priority queue. This will still produce a correct optimal path, but it will generally be slower. The upside is that Bellman-Ford can handle negative edges and still produce an optimal solution. 
 
-	The 2 pathfinding algorithms we will be comparing are djikstra’s algorithm and bellman-ford’s. Djikstra’s algorithm is a greedy algorithm that keeps a priority queue of untraversed edges. Upon visiting a node its edges are added to the queue. The algorithm will then check the lowest weight edge in the queue until it reaches the destination. If all of the edges are positive then it will always find the shortest path. Bellman-Ford is similar but it uses a normal queue instead of a priority queue. This will still produce a correct optimal path, but it will generally be slower. The upside is that Bellman-Ford can handle negative edges and still produce an optimal solution. 
-
-We will be running both on the network simulation tool mininet to determine their effectiveness.
+We will be running both on the network simulation tool mininet to determine their effectiveness, optimal path, algorithm run and stabilisation time i.e., how long does the source node take to reach destination node after it failed to reach due to link failures.
 
 # Contributions
 
