@@ -21,6 +21,7 @@ We will be running both on the network simulation tool mininet to determine thei
 * Added command line options  
 * Ran the recorded simulations  
 * Report contribution
+* Video presentation
 
 
 ## Rubaiz Momin
@@ -29,6 +30,7 @@ We will be running both on the network simulation tool mininet to determine thei
 * Convert miniEdit graph to adjacency list to run algorithms on the graph.  
 * Created the simulation framework to run algorithms along with the link fail/recover service in the background.  
 * Report contribution.
+* Video presentation.
 
 # Instructions
 
