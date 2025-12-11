@@ -37,10 +37,10 @@ We will be running both on the network simulation tool mininet to determine thei
 1 Install all networkx dependency by running **pip3 install networkx\[default\]**  
 2. Go to src/simulation/simulation.py, under run\_simulation, we have link\_failure\_thread which defines our thread that will run link failures and recoveries. Change the probability based on your liking here.  
 3. Go back to the src directory which contains the main.py file. The main.py contains the following parameters:
-    1. Topology: Use the keywords from the following: \[dense, line, ring, sparse, star, tree\]
-    2. Size of the graph: numbers representing the hosts  
-    3. Repetition: How many times the simulation should run  
-    4. So to run a ring graph with 10 hosts and repeat the simulation 3 times, we do: **sudo python3 main.py ring 10 3**
+  1. Topology: Use the keywords from the following: \[dense, line, ring, sparse, star, tree\]
+  2. Size of the graph: numbers representing the hosts
+  3. Repetition: How many times the simulation should run
+  4. So to run a ring graph with 10 hosts and repeat the simulation 3 times, we do: **sudo python3 main.py ring 10 3**
 
 # Implementation details
 
